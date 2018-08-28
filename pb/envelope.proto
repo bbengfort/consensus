@@ -1,0 +1,53 @@
+// Wrapper for all messages sent between peers on a single stream. The wrapper
+// allows us to send multiple message types on a single bidirectional gRPC
+// stream RPC service. The message is defined by it's type, and the wrapper
+// holds oneof the messages.
+syntax = "proto3";
+package pb;
+
+import "beacon.proto";
+import "epaxos.proto";
+
+// Specifies the message type in a peer request and reply
+enum Type {
+    BEACON = 0;
+    PREPARE = 1;
+    ACCEPT = 2;
+    COMMIT = 3;
+    TRYPREACCEPT = 4;
+    PREACCEPT = 5;
+}
+
+// A wrapper message that can contain one of the request message types.
+message PeerRequest {
+    Type type = 1;     // The type of the request
+    string sender = 2; // The unique name/hostname of the message origination
+
+    // only one of these fields can be set, and the field that is set should
+    // match the message type described above.
+    oneof message {
+        BeaconRequest beacon = 10;
+        PrepareRequest prepare = 11;
+        AcceptRequest accept = 12;
+        CommitRequest commit = 13;
+        TryPreAcceptRequest tryPreAcccept = 14;
+        PreAcceptRequest preAccept = 15;
+    }
+}
+
+// A wrapper message that can contain one of the reply message types.
+message PeerReply {
+    Type type = 1;     // The type of the reply
+    string sender = 2; // The unique name/hostname of the message origination
+    bool success = 3;  // If the request succeded or not
+
+    // only one of these fields can be set, and the field that is set should
+    // match the message type described above.
+    oneof message {
+        BeaconReply beacon = 10;
+        PrepareReply prepare = 11;
+        AcceptReply accept = 12;
+        TryPreAcceptReply tryPreAccept = 14;
+        PreAcceptReply preAccept = 15;
+    }
+}

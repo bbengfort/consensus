@@ -1,0 +1,19 @@
+// Defines communication between clients who want to commit values to the log
+syntax = "proto3";
+package pb;
+
+message ProposeRequest {
+    string identity = 1;  // A unique identiy for the client
+    string name = 2;      // The name of the command or object
+    bytes value = 7;      // The value of the object or command (nil for noop)
+}
+
+message ProposeReply {
+    bool success = 1;     // Whether or not there was an error or redirect
+    string redirect = 2;  // Used to pass the client to another replica
+    string error = 3;     // Any error messages associated with the request
+    uint64 seq = 4;       // The index of the log entry committed
+    int32 leader = 5;     // The replica that committed the proposed command
+    string name = 6;      // The name of the command or object
+    bytes value = 7;      // The value of the object or command (nil for noop)
+}

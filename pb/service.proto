@@ -1,0 +1,10 @@
+syntax = "proto3";
+package pb;
+
+import "client.proto";
+import "envelope.proto";
+
+service Consensus {
+    rpc Propose (ProposeRequest) returns (ProposeReply) {}
+    rpc Dispatch (stream PeerRequest) returns (stream PeerReply) {}
+}

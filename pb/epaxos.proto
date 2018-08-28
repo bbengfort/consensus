@@ -1,0 +1,105 @@
+// ePaxos RPC message types (feel free to change, this is based on original implemntation)
+syntax = "proto3";
+package pb;
+
+// Specifies the status of a ballot
+enum Status {
+    NONE = 0;
+    PREACCEPTED = 1;
+    PREACCEPTED_EQ = 2;
+    ACCEPTED = 3;
+    COMMITTED = 4;
+    EXECUTED = 5;
+}
+
+
+message PrepareRequest {
+    int32 leaderId = 1;
+    int32 replica = 2;
+    int32 instance = 3;
+    uint64 ballot = 4;
+}
+
+message PrepareReply {
+    int32 acceptorId = 1;
+    int32 replica = 2;
+    int32 instance = 3;
+    bool ok = 4;
+    uint64 ballot = 5;
+    Status status = 6;
+    string name = 7;
+    bytes value = 8;
+    uint64 seq = 9;
+    bytes deps = 10;
+}
+
+message PreAcceptRequest {
+    int32 leaderId = 1;
+    int32 replica = 2;
+    int32 instance = 3;
+    uint64 ballot = 4;
+    string name = 5;
+    bytes value = 6;
+    uint64 seq = 7;
+    bytes deps = 8;
+}
+
+message PreAcceptReply {
+    int32 replica = 1;
+    int32 instance = 2;
+    bool ok = 3;
+    uint64 ballot = 4;
+    uint64 seq = 5;
+    bytes deps = 6;
+    bytes committedDeps = 7;
+}
+
+message AcceptRequest {
+    int32 leaderId = 1;
+    int32 replica = 2;
+    int32 instance = 3;
+    uint64 ballot = 4;
+    uint64 Count = 5;
+    uint64 seq = 6;
+    bytes deps = 7;
+}
+
+
+message AcceptReply {
+    int32 replica = 1;
+    int32 instance = 2;
+    bool ok = 3;
+    uint64 ballot = 4;
+}
+
+message CommitRequest {
+    int32 leaderId = 1;
+    int32 replica = 2;
+    int32 instance = 3;
+    string name = 4;
+    bytes value = 5;
+    uint64 seq = 6;
+    bytes deps = 7;
+}
+
+message TryPreAcceptRequest {
+    int32 leaderId = 1;
+    int32 replica = 2;
+    int32 instance = 3;
+    uint64 ballot = 4;
+    string name = 5;
+    bytes value = 6;
+    uint64 seq = 7;
+    bytes deps = 8;
+}
+
+message TryPreAcceptReply {
+    int32 acceptorId = 1;
+    int32 replica = 2;
+    int32 instance = 3;
+    bool ok = 4;
+    uint64 ballot = 5;
+    int32 conflictReplica = 6;
+    int32 conflictInstance = 7;
+    Status conflictStatus = 8;
+}

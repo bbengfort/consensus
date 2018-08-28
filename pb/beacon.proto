@@ -1,0 +1,11 @@
+// Keep-alive messages sent to measure the health of peers
+syntax = "proto3";
+package pb;
+
+message BeaconRequest {
+    string timestamp = 1; // Timestamp formatted as time.RFC3339Nano
+}
+
+message BeaconReply {
+    string timestamp = 1; // Timestamp formatted as time.RFC3339Nano
+}
