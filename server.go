@@ -11,10 +11,16 @@ import (
 
 // Propose is a unary RPC that allows clients to propose commands to the quorum.
 func (r *Replica) Propose(ctx context.Context, req *pb.ProposeRequest) (*pb.ProposeReply, error) {
+	// Record the client request (optional)
+	r.Metrics.Request(req.Identity)
+
 	reply := &pb.ProposeReply{
 		Success: false,
 		Error:   "RPC not implemented yet",
 	}
+
+	// Record the client response (optional)
+	r.Metrics.Complete(false)
 	return reply, nil
 }
 

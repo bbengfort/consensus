@@ -113,3 +113,13 @@ $ make protobuf
 ```
 
 Note that to run this command, [Protocol Buffers v3](https://grpc.io/docs/quickstart/go.html#install-protocol-buffers-v3) must be installed on your system (this is not a go dependency).
+
+## Metrics
+
+A note on metrics, there is a `Metrics` data structure on the `Replica` that keeps track of the number of requests and unique clients. Metrics are updated in the `Propose` method in `server.go`. Note that this is completely optional and can be ignored. Metrics can also be dumped to disk, appended to a [JSON lines](http://jsonlines.org/) file as follows:
+
+```go
+replica.Metrics.Dump("path/to/metrics.json")
+```
+
+If you'd like to know more about benchmarking the quorum, please let me know!
